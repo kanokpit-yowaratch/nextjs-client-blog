@@ -31,10 +31,10 @@ interface Post {
 }
 
 async function postList() {
-  const apiUser = 'https://seer-of-human.com';
+  const apiUser = process.env.NEXT_PUBLIC_API;
   let data: Post[] = [];
   await axios
-    .get(`${apiUser}/posts`)
+    .get(`${apiUser}/blogs`)
     .then((response) => {
       data = response.data;
     })

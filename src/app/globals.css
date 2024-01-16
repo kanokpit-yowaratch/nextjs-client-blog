@@ -25,3 +25,15 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.preview-image {
+  width: 350px;
+  min-width: 100px;
+  max-width: 400px;
+  height: 200px;
+  position: relative;
+}
+
+.form-input {
+  width: 80%;
+}
