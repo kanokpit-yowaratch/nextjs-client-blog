@@ -30,7 +30,7 @@ const style = {
   p: 4,
 };
 
-function create() {
+function Create() {
   const [file, setFile] = useState<File>()
   const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
@@ -258,5 +258,4 @@ function create() {
   )
 }
 
-export default create
-
+export default Create;
