@@ -45,7 +45,7 @@ async function PostList() {
 
   const editBlog = React.useCallback(
     (id: GridRowId) => () => {
-      window.location.href = `/edit/${id}`;
+      window.location.href = `/blog/edit/${id}`;
     },
     [],
   );
@@ -96,11 +96,6 @@ async function PostList() {
       type: 'actions',
       width: 200,
       getActions: (params) => [
-        <Link
-          href={`/edit/${params.row.id}`}
-        >
-          {params.row.id}
-        </Link>,
         <GridActionsCellItem
           icon={<EditIcon />}
           label="Edit blog"
