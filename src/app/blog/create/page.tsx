@@ -5,30 +5,8 @@ import { Button, Box, Modal, Typography, Link, Grid, TextField, CssBaseline, Con
 import Folder from '@mui/icons-material/Folder';
 import NextImage from 'next/image'
 import axios from "axios"
-
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
-  height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
-  bottom: 0,
-  left: 0,
-  whiteSpace: 'nowrap',
-  width: 1,
-});
-
-const style = {
-  position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
-  p: 4,
-};
+import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
+import Style from '@/app/styles/style';
 
 function Create() {
   const [file, setFile] = useState<File>()
@@ -64,7 +42,6 @@ function Create() {
     formData.set('details', details);
     // manual, review later
     formData.set('category_id', '1');
-    formData.set('cover_id', '1');
     formData.set('count_view', '0');
     formData.set('related', '');
     formData.set('seo_title', '');
@@ -245,7 +222,7 @@ function Create() {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box sx={style}>
+        <Box sx={Style}>
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Create post successfully.
           </Typography>
