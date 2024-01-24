@@ -5,27 +5,18 @@ import {
   Container,
   Box,
   Typography,
-  ButtonGroup,
   Link,
-  Paper, Table, TableBody,
-  Button,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow
+  Button
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
 
-import Avatar from "@mui/material/Avatar";
 import axios from "axios";
 import {
   EditOutlined,
   DeleteOutlined,
-  AccountBoxOutlined,
   InfoOutlined,
 } from "@mui/icons-material";
-import { DataGrid, GridActionsCellItem, GridColDef, GridRowId, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
+import NextImage from 'next/image'
+import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef, GridRowId, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
 
 async function PostList() {
   const apiUser = process.env.NEXT_PUBLIC_API;
@@ -50,6 +41,13 @@ async function PostList() {
     [],
   );
 
+  const showBlog = React.useCallback(
+    (id: GridRowId) => () => {
+      window.location.href = `/blog/${id}`;
+    },
+    [],
+  );
+
   const userDelete = async (id: string | number) => {
     await axios
       .delete(`${apiUser}/users/delete/${id}`)
@@ -68,14 +66,40 @@ async function PostList() {
   if (data && data.length) {
     blogRows = data.filter((obj) => {
       if (obj.id && obj.title) {
-        const row = { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-        return row;
+        return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
       }
     })
   }
 
   const blogColumns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 50 },
+    {
+      field: 'cover', sortable: false, headerName: 'Photo', width: 70,
+      renderCell: (params) => (
+        <div>
+          {params.row.cover_path ? (
+            <NextImage
+              src={`${process.env.NEXT_PUBLIC_API}/medias/${params.row.cover_path}`}
+              fill
+              style={{
+                objectFit: 'cover',
+              }}
+              alt={params.row.title}
+            />
+          ) : (
+            <NextImage
+              src="/upload-placeholder.jpg"
+              fill
+              style={{
+                objectFit: 'cover',
+              }}
+              alt=""
+            />
+          )}
+
+        </div>
+      )
+    },
     {
       field: 'blog',
       headerName: 'Blog info',
@@ -97,15 +121,20 @@ async function PostList() {
       width: 200,
       getActions: (params) => [
         <GridActionsCellItem
-          icon={<EditIcon />}
-          label="Edit blog"
-          onClick={editBlog(params.row.id)}
-        // showInMenu
+          icon={<InfoOutlined />}
+          label="Post detail"
+          onClick={showBlog(params.row.id)}
         />,
         <GridActionsCellItem
-          icon={<DeleteIcon />}
+          icon={<EditOutlined />}
+          label="Edit blog"
+          onClick={editBlog(params.row.id)}
+        />,
+        <GridActionsCellItem
+          icon={<DeleteOutlined />}
           label="Delete"
           onClick={() => userDelete(params.id)}
+          showInMenu
         />,
       ],
     },
@@ -138,69 +167,8 @@ async function PostList() {
               },
             }}
             pageSizeOptions={[5, 10]}
-          // checkboxSelection
           />
         </div>
-
-        {/* <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 460 }} aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell align="center">ID</TableCell>
-                <TableCell align="left">Title</TableCell>
-                <TableCell align="left">Description</TableCell>
-                <TableCell align="center">Action</TableCell>
-              </TableRow>
-            </TableHead>
-            {data.length ? (
-              <TableBody>
-                {data.map((row: Post) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell align="center">{row.id}</TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.title}
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      {row.description}
-                    </TableCell>
-                    <TableCell align="center">
-                      <ButtonGroup
-                        size="small"
-                        variant="outlined"
-                        aria-label="outlined button group"
-                      >
-                        <Button>
-                          <Link href={"/info/" + row.id}>
-                            <InfoOutlined />
-                          </Link>
-                        </Button>
-                        <Button>
-                          <Link href={"/update/" + row.id}>
-                            <EditOutlined />
-                          </Link>
-                        </Button>
-                        <Button onClick={() => UserDelete(row.id)}>
-                          <DeleteOutlined />
-                        </Button>
-                      </ButtonGroup>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            ) : (
-              <TableBody>
-                <TableRow>
-                  <TableCell colSpan={6} align="center">
-                    No data found
-                  </TableCell>
-                </TableRow>
-              </TableBody>
-            )}
-          </Table>
-        </TableContainer> */}
 
       </Container>
     </React.Fragment>
