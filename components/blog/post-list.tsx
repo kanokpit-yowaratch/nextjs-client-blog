@@ -18,47 +18,34 @@ import {
 import NextImage from 'next/image'
 import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef, GridRowId, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
 
-async function PostList() {
+async function list() {
   const apiUser = process.env.NEXT_PUBLIC_API;
+  let data: Post[] = [];
+  await axios
+    .get(`${apiUser}/blogs`)
+    .then((response) => {
+      data = response.data;
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  return data;
+}
 
-  async function list() {
-    let data: Post[] = [];
-    await axios
-      .get(`${apiUser}/blogs`)
-      .then((response) => {
-        data = response.data;
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return data;
-  }
+async function userDelete(id: GridRowId) {
+  const apiUser = process.env.NEXT_PUBLIC_API;
+  console.log(id);
+  // await axios
+  //   .delete(`${apiUser}/users/delete/${id}`)
+  //   .then(() => {
+  //     // ...
+  //   })
+  //   .catch((error) => {
+  //     console.log(error);
+  //   });
+}
 
-  const editBlog = React.useCallback(
-    (id: GridRowId) => () => {
-      window.location.href = `/blog/edit/${id}`;
-    },
-    [],
-  );
-
-  const showBlog = React.useCallback(
-    (id: GridRowId) => () => {
-      window.location.href = `/blog/${id}`;
-    },
-    [],
-  );
-
-  const userDelete = async (id: string | number) => {
-    await axios
-      .delete(`${apiUser}/users/delete/${id}`)
-      .then(() => {
-        // userList(limit, currentPage);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
+async function PostList() {
   const data: Post[] = await list();
 
   let blogRows: readonly any[] = [];
@@ -72,7 +59,7 @@ async function PostList() {
   }
 
   const blogColumns: GridColDef[] = [
-    { field: 'id', headerName: 'ID', width: 50 },
+    { field: 'id', headerName: 'ID', width: 50, type: 'number' },
     {
       field: 'cover', sortable: false, headerName: 'Photo', width: 70,
       renderCell: (params) => (
@@ -96,7 +83,6 @@ async function PostList() {
               alt=""
             />
           )}
-
         </div>
       )
     },
@@ -106,6 +92,7 @@ async function PostList() {
       description: 'Title and Description',
       sortable: false,
       width: 250,
+      type: 'string',
       renderCell: (params) => (
         <div>
           <Typography>{params.row.title}</Typography>
@@ -113,8 +100,8 @@ async function PostList() {
         </div>
       )
     },
-    { field: 'category_id', headerName: 'Category', width: 100 },
-    { field: 'slug', headerName: 'Slug', width: 100 },
+    { field: 'category_id', headerName: 'Category', width: 100, type: 'number' },
+    { field: 'slug', headerName: 'Slug', width: 100, type: 'string' },
     {
       field: 'actions',
       type: 'actions',
@@ -122,13 +109,13 @@ async function PostList() {
       getActions: (params) => [
         <GridActionsCellItem
           icon={<InfoOutlined />}
-          label="Post detail"
-          onClick={showBlog(params.row.id)}
+          label="Detail"
+          onClick={() => window.location.href = `/blog/${params.id}`}
         />,
         <GridActionsCellItem
           icon={<EditOutlined />}
-          label="Edit blog"
-          onClick={editBlog(params.row.id)}
+          label="Edit"
+          onClick={() => window.location.href = `/blog/edit/${params.id}`}
         />,
         <GridActionsCellItem
           icon={<DeleteOutlined />}

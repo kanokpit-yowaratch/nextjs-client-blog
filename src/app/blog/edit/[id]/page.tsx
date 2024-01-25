@@ -6,8 +6,9 @@ import NextImage from 'next/image'
 import axios from "axios"
 import Style from '@/app/styles/style';
 import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
+import { blogInfo } from '@/types/common';
 
-function page({ params }: any) {
+async function page({ params }: any) {
     const id = params.id;
     const [file, setFile] = useState<File>()
     const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
@@ -16,8 +17,6 @@ function page({ params }: any) {
     const [slug, setSlug] = useState("");
     const [description, setDescription] = useState("");
     const [details, setDetails] = useState("");
-
-    // get id'data
 
     const handleOpen = () => setOpenSuccessModal(true);
     const handleClose = () => {
@@ -108,6 +107,11 @@ function page({ params }: any) {
             };
         }
     };
+
+    const blog: Post = await blogInfo(id);
+    // setBlogData(blog);
+    console.log(blog.title);
+
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
             <Box dir="rtl">
@@ -156,8 +160,11 @@ function page({ params }: any) {
                                 <TextField
                                     id="title"
                                     label="Title"
+                                    placeholder="Title"
+                                    value={blog.title}
+                                    hidden={!blog.title}
                                     variant="outlined"
-                                    onChange={(e) => setTitle(e.target.value)}
+                                    onChange={(e) => ({})}
                                     fullWidth
                                     required
                                 />
@@ -166,8 +173,10 @@ function page({ params }: any) {
                                 <TextField
                                     id="slug"
                                     label="Slug"
+                                    placeholder="Slug"
+                                    value={blog.slug}
                                     variant="outlined"
-                                    onChange={(e) => setSlug(e.target.value)}
+                                    onChange={(e) => ({})}
                                     fullWidth
                                     required
                                 />
@@ -176,8 +185,10 @@ function page({ params }: any) {
                                 <TextField
                                     id="description"
                                     label="Description"
+                                    placeholder="Description"
+                                    value={blog.description}
                                     variant="outlined"
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    onChange={(e) => ({})}
                                     fullWidth
                                     required
                                 />
@@ -186,8 +197,10 @@ function page({ params }: any) {
                                 <TextField
                                     id="details"
                                     label="Details"
+                                    placeholder="Details"
+                                    value={blog.details}
                                     variant="outlined"
-                                    onChange={(e) => setDetails(e.target.value)}
+                                    onChange={(e) => ({})}
                                     fullWidth
                                     required
                                 />
@@ -218,4 +231,4 @@ function page({ params }: any) {
     )
 }
 
-export default page
+export default page;
