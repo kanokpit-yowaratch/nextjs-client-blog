@@ -105,36 +105,36 @@ function Edit({ params }: any) {
         }
     };
 
-    useEffect(() => {
-        async function postInfo(): Promise<void> {
-            const apiUser = process.env.NEXT_PUBLIC_API;
-            await axios
-                .get(`${apiUser}/blogs/${id}`)
-                .then((response) => {
-                    // console.log(response.data);
-                    if (response.data) {
-                        const data: Post = response.data;
-                        setTitle(data.title);
-                        setSlug(data.slug);
-                        setDescription(data.description);
-                        setDetails(data.details);
-                        const src = data.cover_path ? `${process.env.NEXT_PUBLIC_API}/medias/${data.cover_path}` : '/upload-placeholder.jpg'
-                        setCoverPath(src);
-                    }
-                })
-                .catch((error) => {
-                    console.log("error: ", error);
-                    setTitle("");
-                    setSlug("");
-                    setDescription("");
-                    setDetails("");
-                    setCoverPath("/upload-placeholder.jpg");
-                });
-        }
+    // useEffect(() => {
+    //     async function postInfo(): Promise<void> {
+    //         const apiUser = process.env.NEXT_PUBLIC_API;
+    //         await axios
+    //             .get(`${apiUser}/blogs/${id}`)
+    //             .then((response) => {
+    //                 // console.log(response.data);
+    //                 if (response.data) {
+    //                     const data: Post = response.data;
+    //                     setTitle(data.title);
+    //                     setSlug(data.slug);
+    //                     setDescription(data.description);
+    //                     setDetails(data.details);
+    //                     const src = data.cover_path ? `${process.env.NEXT_PUBLIC_API}/medias/${data.cover_path}` : '/upload-placeholder.jpg'
+    //                     setCoverPath(src);
+    //                 }
+    //             })
+    //             .catch((error) => {
+    //                 console.log("error: ", error);
+    //                 setTitle("");
+    //                 setSlug("");
+    //                 setDescription("");
+    //                 setDetails("");
+    //                 setCoverPath("/upload-placeholder.jpg");
+    //             });
+    //     }
 
-        postInfo();
-        return () => { };
-    }, [id]);
+    //     postInfo();
+    //     return () => { };
+    // }, [id]);
 
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
