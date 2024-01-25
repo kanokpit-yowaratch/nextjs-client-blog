@@ -45,7 +45,7 @@ function PostList() {
         .get(`${apiUser}/blogs`)
         .then((response) => {
           data = response.data;
-          setBlogData(data);
+          // setBlogData(data);
 
           // if (data && data.length) {
           //   const blogRows = data.filter((obj) => {
