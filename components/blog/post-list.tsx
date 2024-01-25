@@ -34,7 +34,8 @@ import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 function PostList() {
   const [blogData, setBlogData] = useState<Post[]>([]);
-  const [blogRows, setBlogRows] = useState<any[]>([]);
+  // const [blogRows, setBlogRows] = useState<any[]>([]);
+  const blogRows: readonly any[] = [];
 
   useEffect(() => {
     async function list(): Promise<void> {
@@ -46,14 +47,14 @@ function PostList() {
           data = response.data;
           setBlogData(data);
 
-          if (data && data.length) {
-            const blogRows = data.filter((obj) => {
-              if (obj.id && obj.title) {
-                return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-              }
-            })
-            setBlogRows(blogRows);
-          }
+          // if (data && data.length) {
+          //   const blogRows = data.filter((obj) => {
+          //     if (obj.id && obj.title) {
+          //       return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+          //     }
+          //   })
+          //   setBlogRows(blogRows);
+          // }
         })
         .catch((error) => {
           console.log(error);
