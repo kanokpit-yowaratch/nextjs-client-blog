@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { styled } from '@mui/material/styles';
-import { Button, Box, Modal, Typography, Link, Grid, TextField, CssBaseline, Container } from '@mui/material';
+import { Button, Box, Modal, Typography, Link, Grid, TextField, Container } from '@mui/material';
 import Folder from '@mui/icons-material/Folder';
 import NextImage from 'next/image'
 import axios from "axios"
@@ -9,18 +8,18 @@ import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
 import Style from '@/app/styles/style';
 
 function Create() {
-  const [file, setFile] = useState<File>()
-  const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
-  const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [title, setTitle] = useState("");
   const [slug, setSlug] = useState("");
   const [description, setDescription] = useState("");
   const [details, setDetails] = useState("");
+  const [file, setFile] = useState<File>()
+  const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
+  const [openSuccessModal, setOpenSuccessModal] = useState(false);
+  const [active, setActive] = useState(true)
 
   const handleOpen = () => setOpenSuccessModal(true);
   const handleClose = () => {
     setOpenSuccessModal(false)
-    setPreviewAvatar(null);
   };
 
   // const onUpload = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -40,6 +39,7 @@ function Create() {
     formData.set('slug', slug);
     formData.set('description', description);
     formData.set('details', details);
+
     // manual, review later
     formData.set('category_id', '1');
     formData.set('count_view', '0');
@@ -54,11 +54,10 @@ function Create() {
       await axios
         .post(`${api}/blogs`, formData)
         .then((response) => {
+          // console.log(response.data);
           if (response.data.id) {
             handleOpen();
-            setTimeout(() => {
-              window.location.href = "/";
-            }, 3000)
+            setActive(false)
           }
         })
         .catch((error) => {
@@ -149,7 +148,7 @@ function Create() {
                 )}
               </div>
 
-              <Button sx={{ mt: 1 }} component="label" variant="contained" startIcon={<Folder />} onChange={onSelectFile}>
+              <Button sx={{ mt: 1 }} component="label" disabled={!active} variant="contained" startIcon={<Folder />} onChange={onSelectFile}>
                 Browse file
                 <VisuallyHiddenInput type="file" />
               </Button>
@@ -161,6 +160,7 @@ function Create() {
                   id="title"
                   label="Title"
                   variant="outlined"
+                  disabled={!active}
                   onChange={(e) => setTitle(e.target.value)}
                   fullWidth
                   required
@@ -171,6 +171,7 @@ function Create() {
                   id="slug"
                   label="Slug"
                   variant="outlined"
+                  disabled={!active}
                   onChange={(e) => setSlug(e.target.value)}
                   fullWidth
                   required
@@ -181,6 +182,7 @@ function Create() {
                   id="description"
                   label="Description"
                   variant="outlined"
+                  disabled={!active}
                   onChange={(e) => setDescription(e.target.value)}
                   fullWidth
                   required
@@ -191,27 +193,18 @@ function Create() {
                   id="details"
                   label="Details"
                   variant="outlined"
+                  disabled={!active}
                   onChange={(e) => setDetails(e.target.value)}
                   fullWidth
                   required
                 />
               </Grid>
               <Grid item xs={12}>
-                <Button type="submit" variant="contained" fullWidth>
+                <Button type="submit" variant="contained" disabled={!active} fullWidth>
                   Create
                 </Button>
               </Grid>
             </Grid>
-
-            {/* <Box>
-            <Button
-              type="submit"
-              variant="contained"
-              startIcon={<CloudUploadIcon />}
-            >
-              Upload
-            </Button>
-          </Box> */}
           </Box>
         </form>
       </Box>
@@ -226,9 +219,6 @@ function Create() {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Create post successfully.
           </Typography>
-          {/* <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Your file in [root]/public/uploads directory.
-          </Typography> */}
         </Box>
       </Modal>
     </Container>
