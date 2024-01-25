@@ -106,7 +106,7 @@ function Edit({ params }: any) {
     };
 
     useEffect(() => {
-        async function fetchData(): Promise<void> {
+        async function postInfo(): Promise<void> {
             const apiUser = process.env.NEXT_PUBLIC_API;
             await axios
                 .get(`${apiUser}/blogs/${id}`)
@@ -132,7 +132,7 @@ function Edit({ params }: any) {
                 });
         }
 
-        fetchData();
+        postInfo();
         return () => { };
     }, [id]);
 

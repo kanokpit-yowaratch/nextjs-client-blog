@@ -37,7 +37,7 @@ function PostList() {
   const [blogRows, setBlogRows] = useState<any[]>([]);
 
   useEffect(() => {
-    async function fetchData(): Promise<void> {
+    async function list(): Promise<void> {
       const apiUser = process.env.NEXT_PUBLIC_API;
       let data: Post[] = [];
       await axios
@@ -60,7 +60,7 @@ function PostList() {
         });
     }
 
-    fetchData();
+    list();
     return () => { };
   }, []);
 
