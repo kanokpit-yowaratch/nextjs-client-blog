@@ -37,33 +37,33 @@ function PostList() {
   // const [blogRows, setBlogRows] = useState<any[]>([]);
   const blogRows: readonly any[] = [];
 
-  useEffect(() => {
-    async function list(): Promise<void> {
-      const apiUser = process.env.NEXT_PUBLIC_API;
-      let data: Post[] = [];
-      await axios
-        .get(`${apiUser}/blogs`)
-        .then((response) => {
-          data = response.data;
-          // setBlogData(data);
+  // useEffect(() => {
+  //   async function list(): Promise<void> {
+  //     const apiUser = process.env.NEXT_PUBLIC_API;
+  //     let data: Post[] = [];
+  //     await axios
+  //       .get(`${apiUser}/blogs`)
+  //       .then((response) => {
+  //         data = response.data;
+  //         setBlogData(data);
 
-          // if (data && data.length) {
-          //   const blogRows = data.filter((obj) => {
-          //     if (obj.id && obj.title) {
-          //       return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-          //     }
-          //   })
-          //   setBlogRows(blogRows);
-          // }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
+  //         if (data && data.length) {
+  //           const blogRows = data.filter((obj) => {
+  //             if (obj.id && obj.title) {
+  //               return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+  //             }
+  //           })
+  //           setBlogRows(blogRows);
+  //         }
+  //       })
+  //       .catch((error) => {
+  //         console.log(error);
+  //       });
+  //   }
 
-    list();
-    return () => { };
-  }, []);
+  //   list();
+  //   return () => { };
+  // }, []);
 
   const blogColumns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 50, type: 'number' },
