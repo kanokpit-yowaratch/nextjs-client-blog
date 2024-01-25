@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { Button, Box, Modal, Typography, Link, Grid, TextField, Container } from '@mui/material';
+import { Button, Box, Modal, Typography, Link, Grid, TextField, Container, DialogActions } from '@mui/material';
 import Folder from '@mui/icons-material/Folder';
 import NextImage from 'next/image'
 import axios from "axios"
@@ -17,15 +17,10 @@ function Create() {
   const [openSuccessModal, setOpenSuccessModal] = useState(false);
   const [active, setActive] = useState(true)
 
-  const handleOpen = () => setOpenSuccessModal(true);
   const handleClose = () => {
-    setOpenSuccessModal(false)
+    setOpenSuccessModal(false);
+    window.location.href = `/`;
   };
-
-  // const onUpload = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault()
-  //   if (!file) return
-  // }
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -34,6 +29,9 @@ function Create() {
     const formData = new FormData();
     if (file) {
       formData.set('file', file);
+    } else {
+      alert("Please upload photo!");
+      return;
     }
     formData.set('title', title);
     formData.set('slug', slug);
@@ -56,8 +54,8 @@ function Create() {
         .then((response) => {
           // console.log(response.data);
           if (response.data.id) {
-            handleOpen();
-            setActive(false)
+            setOpenSuccessModal(true);
+            setActive(false);
           }
         })
         .catch((error) => {
@@ -219,6 +217,11 @@ function Create() {
           <Typography id="modal-modal-title" variant="h6" component="h2">
             Create post successfully.
           </Typography>
+          <DialogActions>
+            <Button autoFocus onClick={handleClose}>
+              Ok
+            </Button>
+          </DialogActions>
         </Box>
       </Modal>
     </Container>

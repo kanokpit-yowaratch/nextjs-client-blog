@@ -1,6 +1,6 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { Button, Box, Modal, Typography, Link, Grid, TextField, CssBaseline, Container } from '@mui/material';
+import { Button, Box, Modal, Typography, Link, Grid, TextField, CssBaseline, Container, DialogActions } from '@mui/material';
 import Folder from '@mui/icons-material/Folder';
 import NextImage from 'next/image'
 import axios from "axios"
@@ -19,9 +19,9 @@ function Edit({ params }: any) {
     const [openSuccessModal, setOpenSuccessModal] = useState(false);
     const [active, setActive] = useState(true)
 
-    const handleOpen = () => setOpenSuccessModal(true);
     const handleClose = () => {
         setOpenSuccessModal(false)
+        window.location.href = `/`;
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -31,6 +31,8 @@ function Edit({ params }: any) {
         const formData = new FormData();
         if (file) {
             formData.set('file', file);
+        } else {
+            // TODO: Set to call no file API
         }
         formData.set('title', title);
         formData.set('slug', slug);
@@ -51,8 +53,8 @@ function Edit({ params }: any) {
             await axios
                 .patch(`${api}/blogs/${id}`, formData)
                 .then((response) => {
-                    handleOpen();
-                    setActive(false)
+                    setOpenSuccessModal(true);
+                    setActive(false);
                 })
                 .catch((error) => {
                     console.log("error: ", error);
@@ -252,6 +254,11 @@ function Edit({ params }: any) {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         The post has been updated.
                     </Typography>
+                    <DialogActions>
+                        <Button autoFocus onClick={handleClose}>
+                            Ok
+                        </Button>
+                    </DialogActions>
                 </Box>
             </Modal>
         </Container>
