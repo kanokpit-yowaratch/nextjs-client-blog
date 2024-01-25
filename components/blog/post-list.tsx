@@ -6,63 +6,58 @@ import {
   Box,
   Typography,
   Link,
-  Button
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions
 } from "@mui/material";
 
 import axios from "axios";
 import {
   EditOutlined,
-  // DeleteOutlined,
+  DeleteOutlined,
   InfoOutlined,
 } from "@mui/icons-material";
 import NextImage from 'next/image'
-import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
-
-
-// TODO: Delete function
-// async function userDelete(id: GridRowId) {
-//   const apiUser = process.env.NEXT_PUBLIC_API;
-//   await axios
-//     .delete(`${apiUser}/users/delete/${id}`)
-//     .then(() => {
-//       // ...
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
+import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
 
 function PostList() {
   const [blogData, setBlogData] = useState<Post[]>([]);
   const [blogRows, setBlogRows] = useState<any[]>([]);
+  const [deleteId, setDeleteId] = useState<GridRowId>(0);
+  const [openConfirm, setOpenConfirm] = useState(false);
+
+  const list = () => {
+    const apiUser = process.env.NEXT_PUBLIC_API;
+    axios
+      .get(`${apiUser}/blogs`)
+      .then((response) => {
+        const data: Post[] = response.data;
+        setBlogData(data);
+
+        if (data && data.length) {
+          const blogRows = data.filter((obj) => {
+            if (obj.id && obj.title) {
+              return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+            }
+          })
+          setBlogRows(blogRows);
+        }
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   useEffect(() => {
-    async function list(): Promise<void> {
-      const apiUser = process.env.NEXT_PUBLIC_API;
-      let data: Post[] = [];
-      await axios
-        .get(`${apiUser}/blogs`)
-        .then((response) => {
-          data = response.data;
-          setBlogData(data);
-
-          if (data && data.length) {
-            const blogRows = data.filter((obj) => {
-              if (obj.id && obj.title) {
-                return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-              }
-            })
-            setBlogRows(blogRows);
-          }
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
     list();
-    return () => { };
   }, []);
+
+  const postDelete = (id: GridRowId) => {
+    setOpenConfirm(true)
+    setDeleteId(id);
+  }
 
   const blogColumns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 50, type: 'number' },
@@ -126,16 +121,33 @@ function PostList() {
             label="Edit"
             onClick={() => window.location.href = `/blog/edit/${params.id}`}
           />
+        </React.Fragment>,
+        <React.Fragment key={params.id}>
+          <GridActionsCellItem
+            icon={<DeleteOutlined />}
+            label="Delete"
+            onClick={() => postDelete(params.id)}
+          />
         </React.Fragment>
-        // <GridActionsCellItem
-        //   icon={<DeleteOutlined />}
-        //   label="Delete"
-        //   onClick={() => postDelete(params.id)}
-        //   showInMenu
-        // />
       ],
     },
   ];
+
+  const handleOk = () => {
+    const apiUser = process.env.NEXT_PUBLIC_API;
+    axios
+      .delete(`${apiUser}/blogs/${deleteId}`)
+      .then(() => {
+        list();
+        setOpenConfirm(false)
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setDeleteId(0);
+      });
+  };
 
   return (
     <React.Fragment>
@@ -167,6 +179,22 @@ function PostList() {
           />
         </div>
 
+        <Dialog
+          sx={{ '& .MuiDialog-paper': { width: '80%', maxHeight: 435 } }}
+          maxWidth="xs"
+          open={openConfirm}
+        >
+          <DialogTitle>Confirm delete</DialogTitle>
+          <DialogContent dividers>
+            Do you want to delete this post?
+          </DialogContent>
+          <DialogActions>
+            <Button autoFocus onClick={() => setOpenConfirm(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleOk}>Ok</Button>
+          </DialogActions>
+        </Dialog>
       </Container>
     </React.Fragment>
   )
