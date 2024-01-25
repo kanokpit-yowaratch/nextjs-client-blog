@@ -7,7 +7,7 @@ import axios from "axios"
 import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
 import Style from '@/app/styles/style';
 
-function page({ params }: any) {
+function Edit({ params }: any) {
     const id = params.id;
     const [title, setTitle] = useState("");
     const [slug, setSlug] = useState("");
@@ -106,9 +106,9 @@ function page({ params }: any) {
     };
 
     useEffect(() => {
-        async function fetchData() {
+        async function fetchData(): Promise<void> {
             const apiUser = process.env.NEXT_PUBLIC_API;
-            axios
+            await axios
                 .get(`${apiUser}/blogs/${id}`)
                 .then((response) => {
                     // console.log(response.data);
@@ -134,7 +134,7 @@ function page({ params }: any) {
 
         fetchData();
         return () => { };
-    }, []);
+    }, [id]);
 
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
@@ -258,4 +258,4 @@ function page({ params }: any) {
     )
 }
 
-export default page;
+export default Edit;

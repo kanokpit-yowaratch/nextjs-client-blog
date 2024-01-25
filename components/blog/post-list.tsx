@@ -1,5 +1,5 @@
 'use client';
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import {
   Container,
@@ -18,19 +18,6 @@ import {
 import NextImage from 'next/image'
 import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
-async function list() {
-  const apiUser = process.env.NEXT_PUBLIC_API;
-  let data: Post[] = [];
-  await axios
-    .get(`${apiUser}/blogs`)
-    .then((response) => {
-      data = response.data;
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  return data;
-}
 
 // TODO: Delete function
 // async function userDelete(id: GridRowId) {
@@ -45,18 +32,37 @@ async function list() {
 //     });
 // }
 
-async function PostList() {
-  const data: Post[] = await list();
+function PostList() {
+  const [blogData, setBlogData] = useState<Post[]>([]);
+  const [blogRows, setBlogRows] = useState<any[]>([]);
 
-  let blogRows: readonly any[] = [];
+  useEffect(() => {
+    async function fetchData(): Promise<void> {
+      const apiUser = process.env.NEXT_PUBLIC_API;
+      let data: Post[] = [];
+      await axios
+        .get(`${apiUser}/blogs`)
+        .then((response) => {
+          data = response.data;
+          setBlogData(data);
 
-  if (data && data.length) {
-    blogRows = data.filter((obj) => {
-      if (obj.id && obj.title) {
-        return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-      }
-    })
-  }
+          if (data && data.length) {
+            const blogRows = data.filter((obj) => {
+              if (obj.id && obj.title) {
+                return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+              }
+            })
+            setBlogRows(blogRows);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+
+    fetchData();
+    return () => { };
+  }, []);
 
   const blogColumns: GridColDef[] = [
     { field: 'id', headerName: 'ID', width: 50, type: 'number' },
@@ -138,7 +144,7 @@ async function PostList() {
         <Box display="flex" sx={{ mb: 2 }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6" gutterBottom component="h6" sx={{ mb: 0, mt: 0 }}>
-              Users total: {data.length}
+              Users total: {blogData.length}
             </Typography>
           </Box>
           <Box>
