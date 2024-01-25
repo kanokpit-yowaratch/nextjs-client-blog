@@ -1,27 +1,41 @@
 'use client'
+import { useEffect, useState } from 'react'
 import { Button, Box, Modal, Typography, Link, Grid, TextField, CssBaseline, Container } from '@mui/material';
 import Folder from '@mui/icons-material/Folder';
 import NextImage from 'next/image'
 import axios from "axios"
-import Style from '@/app/styles/style';
 import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
-import { blogInfo } from '@/types/common';
+import Style from '@/app/styles/style';
 
-async function page({ params }: any) {
+function page({ params }: any) {
     const id = params.id;
+    const [title, setTitle] = useState("");
+    const [slug, setSlug] = useState("");
+    const [description, setDescription] = useState("");
+    const [details, setDetails] = useState("");
+    const [coverPath, setCoverPath] = useState("/upload-placeholder.jpg");
+    const [file, setFile] = useState<File>()
+    const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
+    const [openSuccessModal, setOpenSuccessModal] = useState(false);
+    const [active, setActive] = useState(true)
+
+    const handleOpen = () => setOpenSuccessModal(true);
+    const handleClose = () => {
+        setOpenSuccessModal(false)
+    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const api = process.env.NEXT_PUBLIC_API;
         const formData = new FormData();
-        // if (file) {
-        //     formData.set('file', file);
-        // }
-        // formData.set('title', title);
-        // formData.set('slug', slug);
-        // formData.set('description', description);
-        // formData.set('details', details);
+        if (file) {
+            formData.set('file', file);
+        }
+        formData.set('title', title);
+        formData.set('slug', slug);
+        formData.set('description', description);
+        formData.set('details', details);
 
         // manual, review later
         formData.set('category_id', '1');
@@ -37,12 +51,8 @@ async function page({ params }: any) {
             await axios
                 .patch(`${api}/blogs/${id}`, formData)
                 .then((response) => {
-                    if (response.data.id) {
-                        // handleOpen();
-                        setTimeout(() => {
-                            window.location.href = "/";
-                        }, 3000)
-                    }
+                    handleOpen();
+                    setActive(false)
                 })
                 .catch((error) => {
                     console.log("error: ", error);
@@ -84,8 +94,8 @@ async function page({ params }: any) {
                                 lastModified: Date.now(),
                             });
                             // console.log(file);
-                            // setPreviewAvatar(file);
-                            // setFile(fileObject)
+                            setPreviewAvatar(file);
+                            setFile(fileObject)
                         },
                         "image/jpeg",
                         0.8
@@ -95,9 +105,36 @@ async function page({ params }: any) {
         }
     };
 
-    const blog: Post = await blogInfo(id);
-    // setBlogData(blog);
-    // console.log(blog.title);
+    useEffect(() => {
+        async function fetchData() {
+            const apiUser = process.env.NEXT_PUBLIC_API;
+            axios
+                .get(`${apiUser}/blogs/${id}`)
+                .then((response) => {
+                    // console.log(response.data);
+                    if (response.data) {
+                        const data: Post = response.data;
+                        setTitle(data.title);
+                        setSlug(data.slug);
+                        setDescription(data.description);
+                        setDetails(data.details);
+                        const src = data.cover_path ? `${process.env.NEXT_PUBLIC_API}/medias/${data.cover_path}` : '/upload-placeholder.jpg'
+                        setCoverPath(src);
+                    }
+                })
+                .catch((error) => {
+                    console.log("error: ", error);
+                    setTitle("");
+                    setSlug("");
+                    setDescription("");
+                    setDetails("");
+                    setCoverPath("/upload-placeholder.jpg");
+                });
+        }
+
+        fetchData();
+        return () => { };
+    }, []);
 
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
@@ -108,14 +145,14 @@ async function page({ params }: any) {
             </Box>
             <Box>
                 <Typography variant="h6" gutterBottom component="div" align='center'>
-                    Create post
+                    Update post
                 </Typography>
 
                 <form onSubmit={handleSubmit}>
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Box sx={{ mb: 1 }} display="flex" flexDirection="column" alignItems="center">
                             <div className='preview-image'>
-                                {/* {previewAvatar ? (
+                                {previewAvatar ? (
                                     <NextImage
                                         src={URL.createObjectURL(previewAvatar)}
                                         fill
@@ -124,19 +161,19 @@ async function page({ params }: any) {
                                         }}
                                         alt=""
                                     />
-                                ) : ( */}
-                                <NextImage
-                                    src="/upload-placeholder.jpg"
-                                    fill
-                                    style={{
-                                        objectFit: 'cover',
-                                    }}
-                                    alt=""
-                                />
-                                {/* )} */}
+                                ) : (
+                                    <NextImage
+                                        src={coverPath}
+                                        fill
+                                        style={{
+                                            objectFit: 'cover',
+                                        }}
+                                        alt=""
+                                    />
+                                )}
                             </div>
 
-                            <Button sx={{ mt: 1 }} component="label" variant="contained" startIcon={<Folder />} onChange={onSelectFile}>
+                            <Button sx={{ mt: 1 }} component="label" disabled={!active} variant="contained" startIcon={<Folder />} onChange={onSelectFile}>
                                 Browse file
                                 <VisuallyHiddenInput type="file" />
                             </Button>
@@ -148,10 +185,10 @@ async function page({ params }: any) {
                                     id="title"
                                     label="Title"
                                     placeholder="Title"
-                                    value={blog.title}
-                                    hidden={!blog.title}
+                                    value={title}
                                     variant="outlined"
-                                    onChange={(e) => ({})}
+                                    disabled={!active}
+                                    onChange={(e) => setTitle(e.target.value)}
                                     fullWidth
                                     required
                                 />
@@ -161,9 +198,10 @@ async function page({ params }: any) {
                                     id="slug"
                                     label="Slug"
                                     placeholder="Slug"
-                                    value={blog.slug}
+                                    value={slug}
                                     variant="outlined"
-                                    onChange={(e) => ({})}
+                                    disabled={!active}
+                                    onChange={(e) => setSlug(e.target.value)}
                                     fullWidth
                                     required
                                 />
@@ -173,9 +211,10 @@ async function page({ params }: any) {
                                     id="description"
                                     label="Description"
                                     placeholder="Description"
-                                    value={blog.description}
+                                    value={description}
                                     variant="outlined"
-                                    onChange={(e) => ({})}
+                                    disabled={!active}
+                                    onChange={(e) => setDescription(e.target.value)}
                                     fullWidth
                                     required
                                 />
@@ -185,22 +224,36 @@ async function page({ params }: any) {
                                     id="details"
                                     label="Details"
                                     placeholder="Details"
-                                    value={blog.details}
+                                    value={details}
                                     variant="outlined"
-                                    onChange={(e) => ({})}
+                                    disabled={!active}
+                                    onChange={(e) => setDetails(e.target.value)}
                                     fullWidth
                                     required
                                 />
                             </Grid>
-                            {/* <Grid item xs={12}>
-                                <Button type="submit" variant="contained" fullWidth>
+                            <Grid item xs={12}>
+                                <Button type="submit" disabled={!active} variant="contained" fullWidth>
                                     Update
                                 </Button>
-                            </Grid> */}
+                            </Grid>
                         </Grid>
                     </Box>
                 </form>
             </Box>
+
+            <Modal
+                open={openSuccessModal}
+                onClose={handleClose}
+                aria-labelledby="modal-modal-title"
+                aria-describedby="modal-modal-description"
+            >
+                <Box sx={Style}>
+                    <Typography id="modal-modal-title" variant="h6" component="h2">
+                        The post has been updated.
+                    </Typography>
+                </Box>
+            </Modal>
         </Container>
     )
 }

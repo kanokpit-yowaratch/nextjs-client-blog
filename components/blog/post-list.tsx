@@ -12,11 +12,11 @@ import {
 import axios from "axios";
 import {
   EditOutlined,
-  DeleteOutlined,
+  // DeleteOutlined,
   InfoOutlined,
 } from "@mui/icons-material";
 import NextImage from 'next/image'
-import { DataGrid, GridActionsCellItem, GridCellParams, GridColDef, GridRowId, GridRowParams, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridActionsCellItem, GridColDef } from '@mui/x-data-grid';
 
 async function list() {
   const apiUser = process.env.NEXT_PUBLIC_API;
@@ -32,18 +32,18 @@ async function list() {
   return data;
 }
 
-async function userDelete(id: GridRowId) {
-  const apiUser = process.env.NEXT_PUBLIC_API;
-  console.log(id);
-  // await axios
-  //   .delete(`${apiUser}/users/delete/${id}`)
-  //   .then(() => {
-  //     // ...
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
-}
+// TODO: Delete function
+// async function userDelete(id: GridRowId) {
+//   const apiUser = process.env.NEXT_PUBLIC_API;
+//   await axios
+//     .delete(`${apiUser}/users/delete/${id}`)
+//     .then(() => {
+//       // ...
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// }
 
 async function PostList() {
   const data: Post[] = await list();
@@ -120,15 +120,13 @@ async function PostList() {
             label="Edit"
             onClick={() => window.location.href = `/blog/edit/${params.id}`}
           />
-        </React.Fragment>,
-        <React.Fragment key={params.id}>
-          <GridActionsCellItem
-            icon={<DeleteOutlined />}
-            label="Delete"
-            onClick={() => userDelete(params.id)}
-            showInMenu
-          />
-        </React.Fragment>,
+        </React.Fragment>
+        // <GridActionsCellItem
+        //   icon={<DeleteOutlined />}
+        //   label="Delete"
+        //   onClick={() => postDelete(params.id)}
+        //   showInMenu
+        // />
       ],
     },
   ];
