@@ -107,22 +107,28 @@ async function PostList() {
       type: 'actions',
       width: 200,
       getActions: (params) => [
-        <GridActionsCellItem
-          icon={<InfoOutlined />}
-          label="Detail"
-          onClick={() => window.location.href = `/blog/${params.id}`}
-        />,
-        <GridActionsCellItem
-          icon={<EditOutlined />}
-          label="Edit"
-          onClick={() => window.location.href = `/blog/edit/${params.id}`}
-        />,
-        <GridActionsCellItem
-          icon={<DeleteOutlined />}
-          label="Delete"
-          onClick={() => userDelete(params.id)}
-          showInMenu
-        />,
+        <React.Fragment key={params.id}>
+          <GridActionsCellItem
+            icon={<InfoOutlined />}
+            label="Detail"
+            onClick={() => window.location.href = `/blog/${params.id}`}
+          />
+        </React.Fragment>,
+        <React.Fragment key={params.id}>
+          <GridActionsCellItem
+            icon={<EditOutlined />}
+            label="Edit"
+            onClick={() => window.location.href = `/blog/edit/${params.id}`}
+          />
+        </React.Fragment>,
+        <React.Fragment key={params.id}>
+          <GridActionsCellItem
+            icon={<DeleteOutlined />}
+            label="Delete"
+            onClick={() => userDelete(params.id)}
+            showInMenu
+          />
+        </React.Fragment>,
       ],
     },
   ];

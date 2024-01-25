@@ -1,5 +1,4 @@
 'use client'
-import React, { useState } from 'react'
 import { Button, Box, Modal, Typography, Link, Grid, TextField, CssBaseline, Container } from '@mui/material';
 import Folder from '@mui/icons-material/Folder';
 import NextImage from 'next/image'
@@ -10,32 +9,20 @@ import { blogInfo } from '@/types/common';
 
 async function page({ params }: any) {
     const id = params.id;
-    const [file, setFile] = useState<File>()
-    const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
-    const [openSuccessModal, setOpenSuccessModal] = useState(false);
-    const [title, setTitle] = useState("");
-    const [slug, setSlug] = useState("");
-    const [description, setDescription] = useState("");
-    const [details, setDetails] = useState("");
-
-    const handleOpen = () => setOpenSuccessModal(true);
-    const handleClose = () => {
-        setOpenSuccessModal(false)
-        setPreviewAvatar(null);
-    };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
         const api = process.env.NEXT_PUBLIC_API;
         const formData = new FormData();
-        if (file) {
-            formData.set('file', file);
-        }
-        formData.set('title', title);
-        formData.set('slug', slug);
-        formData.set('description', description);
-        formData.set('details', details);
+        // if (file) {
+        //     formData.set('file', file);
+        // }
+        // formData.set('title', title);
+        // formData.set('slug', slug);
+        // formData.set('description', description);
+        // formData.set('details', details);
+
         // manual, review later
         formData.set('category_id', '1');
         formData.set('count_view', '0');
@@ -51,7 +38,7 @@ async function page({ params }: any) {
                 .patch(`${api}/blogs/${id}`, formData)
                 .then((response) => {
                     if (response.data.id) {
-                        handleOpen();
+                        // handleOpen();
                         setTimeout(() => {
                             window.location.href = "/";
                         }, 3000)
@@ -97,8 +84,8 @@ async function page({ params }: any) {
                                 lastModified: Date.now(),
                             });
                             // console.log(file);
-                            setPreviewAvatar(file);
-                            setFile(fileObject)
+                            // setPreviewAvatar(file);
+                            // setFile(fileObject)
                         },
                         "image/jpeg",
                         0.8
@@ -110,7 +97,7 @@ async function page({ params }: any) {
 
     const blog: Post = await blogInfo(id);
     // setBlogData(blog);
-    console.log(blog.title);
+    // console.log(blog.title);
 
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
@@ -128,7 +115,7 @@ async function page({ params }: any) {
                     <Box display="flex" flexDirection="column" alignItems="center">
                         <Box sx={{ mb: 1 }} display="flex" flexDirection="column" alignItems="center">
                             <div className='preview-image'>
-                                {previewAvatar ? (
+                                {/* {previewAvatar ? (
                                     <NextImage
                                         src={URL.createObjectURL(previewAvatar)}
                                         fill
@@ -137,16 +124,16 @@ async function page({ params }: any) {
                                         }}
                                         alt=""
                                     />
-                                ) : (
-                                    <NextImage
-                                        src="/upload-placeholder.jpg"
-                                        fill
-                                        style={{
-                                            objectFit: 'cover',
-                                        }}
-                                        alt=""
-                                    />
-                                )}
+                                ) : ( */}
+                                <NextImage
+                                    src="/upload-placeholder.jpg"
+                                    fill
+                                    style={{
+                                        objectFit: 'cover',
+                                    }}
+                                    alt=""
+                                />
+                                {/* )} */}
                             </div>
 
                             <Button sx={{ mt: 1 }} component="label" variant="contained" startIcon={<Folder />} onChange={onSelectFile}>
@@ -205,28 +192,15 @@ async function page({ params }: any) {
                                     required
                                 />
                             </Grid>
-                            <Grid item xs={12}>
+                            {/* <Grid item xs={12}>
                                 <Button type="submit" variant="contained" fullWidth>
                                     Update
                                 </Button>
-                            </Grid>
+                            </Grid> */}
                         </Grid>
                     </Box>
                 </form>
             </Box>
-
-            <Modal
-                open={openSuccessModal}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-            >
-                <Box sx={Style}>
-                    <Typography id="modal-modal-title" variant="h6" component="h2">
-                        Create post successfully.
-                    </Typography>
-                </Box>
-            </Modal>
         </Container>
     )
 }
