@@ -10,7 +10,8 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions
+  DialogActions,
+  TextField
 } from "@mui/material";
 
 import axios from "axios";
@@ -18,6 +19,8 @@ import {
   EditOutlined,
   DeleteOutlined,
   InfoOutlined,
+  PlusOneOutlined,
+  AddCircleOutlined,
 } from "@mui/icons-material";
 import NextImage from 'next/image'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
@@ -57,6 +60,26 @@ function PostList() {
   const postDelete = (id: GridRowId) => {
     setOpenConfirm(true)
     setDeleteId(id);
+  }
+
+  const filterBy = (search: string) => {
+    const existData = blogData.filter((obj) => {
+      if (obj.id && obj.title) {
+        return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+      }
+    })
+
+    const blogRows = existData.filter((obj) => {
+      const foundTitle = obj.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
+      const foundSlug = obj.slug.toLocaleLowerCase().includes(search.toLocaleLowerCase());
+      const foundDescription = obj.description.toLocaleLowerCase().includes(search.toLocaleLowerCase());
+      const foundDetails = obj.details.toLocaleLowerCase().includes(search.toLocaleLowerCase());
+      if (foundTitle || foundSlug || foundDescription || foundDetails) {
+        return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+      }
+    })
+
+    setBlogRows(blogRows);
   }
 
   const blogColumns: GridColDef[] = [
@@ -156,17 +179,21 @@ function PostList() {
         <Box display="flex" sx={{ mb: 2 }}>
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="h6" gutterBottom component="h6" sx={{ mb: 0, mt: 0 }}>
-              Users total: {blogData.length}
+              Users total: {blogRows.length}
             </Typography>
           </Box>
           <Box>
             <Link href="/blog/create">
-              <Button variant="contained">Create</Button>
+              <Button variant="contained">Add new <AddCircleOutlined sx={{ ml: 1 }} /></Button>
             </Link>
           </Box>
         </Box>
 
-        <div style={{ height: 400, width: '100%' }}>
+        <div>
+          <Box sx={{ mb: 1 }}>
+            <TextField id="search-post" label="Search post:" variant="outlined" onChange={(e) => filterBy(e.target.value)} />
+          </Box>
+
           <DataGrid
             rows={blogRows}
             columns={blogColumns}

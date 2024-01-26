@@ -6,6 +6,7 @@ import NextImage from 'next/image'
 import axios from "axios"
 import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
 import Style from '@/app/styles/style';
+import { ArrowBackIosNewOutlined } from "@mui/icons-material";
 
 function Create() {
   const [title, setTitle] = useState("");
@@ -111,15 +112,19 @@ function Create() {
 
   return (
     <Container maxWidth="lg" sx={{ p: 2 }}>
-      <Box dir="rtl">
-        <Link href="/">
-          <Button variant="contained">Post list</Button>
-        </Link>
+      <Box display="flex" sx={{ mb: 2 }}>
+        <Box sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" gutterBottom component="h6" sx={{ mb: 0, mt: 0 }}>
+            Create post
+          </Typography>
+        </Box>
+        <Box>
+          <Link href="/">
+            <Button variant="contained"><ArrowBackIosNewOutlined sx={{ mr: 1 }} />Post list</Button>
+          </Link>
+        </Box>
       </Box>
       <Box>
-        <Typography variant="h6" gutterBottom component="div" align='center'>
-          Create post
-        </Typography>
 
         <form onSubmit={handleSubmit}>
           <Box display="flex" flexDirection="column" alignItems="center">
