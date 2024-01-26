@@ -29,9 +29,6 @@ function Create() {
     const formData = new FormData();
     if (file) {
       formData.set('file', file);
-    } else {
-      alert("Please upload photo!");
-      return;
     }
     formData.set('title', title);
     formData.set('slug', slug);

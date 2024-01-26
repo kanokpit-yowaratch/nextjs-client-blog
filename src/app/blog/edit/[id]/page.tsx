@@ -31,8 +31,6 @@ function Edit({ params }: any) {
         const formData = new FormData();
         if (file) {
             formData.set('file', file);
-        } else {
-            // TODO: Set to call no file API
         }
         formData.set('title', title);
         formData.set('slug', slug);
