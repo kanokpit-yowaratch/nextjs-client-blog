@@ -1,18 +1,24 @@
 'use client'
 import React, { useState } from 'react'
-import { Box } from '@mui/material'
-import Blog from '@/components/blog-pages/Blog'
+import { Container } from '@mui/material'
+import Header from '@/components/blog-pages/Header'
+import Footer from '@/components/blog-pages/Footer'
+import Slug from '@/components/blog-pages/Slug'
 
 function Page({ params }: { params: { slug: string[] } }) {
   const slugParam = decodeURI(params.slug.join('/'))
   const [slug, setSlug] = useState(slugParam)
 
-  // useEffect
-
   return (
     <>
-    <Box>Slug {slug}</Box>
-      <Blog />
+      <Container maxWidth="lg">
+        <Header title="Blog" />
+        <Slug slug={slug} />
+      </Container>
+      <Footer
+        title="Footer"
+        description="Low Profile ... High Profit"
+      />
     </>
   )
 }
