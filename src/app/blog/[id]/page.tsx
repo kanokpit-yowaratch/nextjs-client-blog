@@ -10,7 +10,7 @@ async function page({ params }: any) {
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
             <Box dir="rtl">
-                <Link href="/">
+                <Link href="/blog">
                     <Button variant="contained">Post list</Button>
                 </Link>
             </Box>

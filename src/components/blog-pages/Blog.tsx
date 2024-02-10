@@ -3,7 +3,6 @@ import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Header from './Header';
 import MainFeaturedPost from './MainFeaturedPost';
-import FeaturedPost from './FeaturedPost';
 import Sidebar from './Sidebar';
 import Footer from './Footer';
 import PostList from './PostList';
@@ -16,25 +15,6 @@ const mainFeaturedPost = {
   imageText: 'main image description',
   linkText: 'Continue reading…',
 };
-
-// const featuredPosts = [
-//   {
-//     title: 'Featured post',
-//     date: 'Nov 12',
-//     description:
-//       'This is a wider card with supporting text below as a natural lead-in to additional content.',
-//     image: 'https://source.unsplash.com/random?wallpapers',
-//     imageLabel: 'Image Text',
-//   },
-//   {
-//     title: 'Post title',
-//     date: 'Nov 11',
-//     description:
-//       'This is a wider card with supporting text below as a natural lead-in to additional content.',
-//     image: 'https://source.unsplash.com/random?wallpapers',
-//     imageLabel: 'Image Text',
-//   },
-// ];
 
 const sidebar = {
   title: 'About',
@@ -62,11 +42,6 @@ export default function Blog() {
         <Header title="Blog" />
         <main>
           <MainFeaturedPost post={mainFeaturedPost} />
-          {/* <Grid container spacing={4}>
-            {featuredPosts.map((post) => (
-              <FeaturedPost key={post.title} post={post} />
-            ))}
-          </Grid> */}
           <Grid container spacing={5} sx={{ mt: 3 }}>
             <PostList />
             <Sidebar

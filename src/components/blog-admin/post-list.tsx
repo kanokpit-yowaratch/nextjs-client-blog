@@ -40,11 +40,7 @@ function PostList() {
         setBlogData(data);
 
         if (data && data.length) {
-          const blogRows = data.filter((obj) => {
-            if (obj.id && obj.title) {
-              return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-            }
-          })
+          const blogRows = data.map((obj) => obj)
           setBlogRows(blogRows);
         }
       })

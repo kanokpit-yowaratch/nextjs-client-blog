@@ -21,7 +21,7 @@ function Edit({ params }: any) {
 
     const handleClose = () => {
         setOpenSuccessModal(false)
-        window.location.href = `/`;
+        window.location.href = `/blog`;
     };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -44,8 +44,8 @@ function Edit({ params }: any) {
         formData.set('seo_title', '');
         formData.set('seo_keywords', '');
         formData.set('seo_description', '');
-        formData.set('active_status', '0');
-        formData.set('article_status', '0');
+        formData.set('active_status', '1');
+        formData.set('article_status', '1');
 
         try {
             await axios
@@ -139,7 +139,7 @@ function Edit({ params }: any) {
     return (
         <Container maxWidth="lg" sx={{ p: 2 }}>
             <Box dir="rtl">
-                <Link href="/">
+                <Link href="/blog">
                     <Button variant="contained">Post list</Button>
                 </Link>
             </Box>
