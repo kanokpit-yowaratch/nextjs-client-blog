@@ -94,11 +94,24 @@ function PostList() {
             </Grid>
           </Card >
         ))}
-        {totalPage && Array.from(Array(totalPage), (e, i) => {
+        {
+          (totalPage < 1) ? (
+            <p>No data available.</p>
+          ) :
+            (totalPage > 1) && Array.from(Array(totalPage), (e, i) => {
+              const cPage = i + 1;
+              const url = (cPage === 1) ? '/' : `/?page=${cPage}`;
+              return <Button component={Link} href={url} key={"link-" + cPage} className='link-page-style' onClick={() => onChangePage(cPage)}>{cPage}</Button>
+            })
+        }
+        {/* {(totalPage === 0) &&
+          <p>No data available.</p>
+        }
+        {(totalPage > 1) && Array.from(Array(totalPage), (e, i) => {
           const cPage = i + 1;
           const url = (cPage === 1) ? '/' : `/?page=${cPage}`;
           return <Button component={Link} href={url} key={"link-" + cPage} className='link-page-style' onClick={() => onChangePage(cPage)}>{cPage}</Button>
-        })}
+        })} */}
       </Grid>
     </>
   );
