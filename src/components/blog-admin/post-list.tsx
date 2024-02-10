@@ -11,7 +11,8 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  TextField
+  TextField,
+  Chip
 } from "@mui/material";
 
 import axios from "axios";
@@ -19,8 +20,8 @@ import {
   EditOutlined,
   DeleteOutlined,
   InfoOutlined,
-  PlusOneOutlined,
   AddCircleOutlined,
+  VisibilityOutlined,
 } from "@mui/icons-material";
 import NextImage from 'next/image'
 import { DataGrid, GridActionsCellItem, GridColDef, GridRowId } from '@mui/x-data-grid';
@@ -37,12 +38,12 @@ function PostList() {
       .get(`${apiUser}/blogs`)
       .then((response) => {
         const data: Post[] = response.data;
+        console.log(data);
         setBlogData(data);
-
         if (data && data.length) {
           const blogRows = data.filter((obj) => {
             if (obj.id && obj.title) {
-              return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+              return { id: obj.id, title: obj.title, slug: obj.slug, status: `hee-${obj.active_status}`, description: obj.description };
             }
           })
           setBlogRows(blogRows);
@@ -50,6 +51,8 @@ function PostList() {
       })
       .catch((error) => {
         console.log(error);
+        setBlogData([]);
+        setBlogRows([]);
       });
   }
 
@@ -63,19 +66,13 @@ function PostList() {
   }
 
   const filterBy = (search: string) => {
-    const existData = blogData.filter((obj) => {
-      if (obj.id && obj.title) {
-        return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
-      }
-    })
-
-    const blogRows = existData.filter((obj) => {
+    const blogRows = blogData.filter((obj) => {
       const foundTitle = obj.title.toLocaleLowerCase().includes(search.toLocaleLowerCase());
       const foundSlug = obj.slug.toLocaleLowerCase().includes(search.toLocaleLowerCase());
       const foundDescription = obj.description.toLocaleLowerCase().includes(search.toLocaleLowerCase());
       const foundDetails = obj.details.toLocaleLowerCase().includes(search.toLocaleLowerCase());
       if (foundTitle || foundSlug || foundDescription || foundDetails) {
-        return { id: obj.id, title: obj.title, category_id: obj.category_id, slug: obj.slug, description: obj.description };
+        return { id: obj.id, title: obj.title, slug: obj.slug, status: obj.active_status + '-' + obj.slug, description: obj.description };
       }
     })
 
@@ -124,32 +121,44 @@ function PostList() {
         </div>
       )
     },
-    { field: 'category_id', headerName: 'Category', width: 100, type: 'number' },
     { field: 'slug', headerName: 'Slug', width: 100, type: 'string' },
+    {
+      field: 'status', headerName: 'Status', width: 150, type: 'string',
+      renderCell: (params) => (
+        <Chip label={params.row.active_status === 1 ? 'active' : 'non-active'} color="primary" variant="outlined" />
+      )
+    },
     {
       field: 'actions',
       type: 'actions',
       width: 200,
       getActions: (params) => [
-        <React.Fragment key={params.id}>
+        <React.Fragment key={`details-${params.id}`}>
           <GridActionsCellItem
             icon={<InfoOutlined />}
             label="Detail"
             onClick={() => window.location.href = `/blog/${params.id}`}
           />
         </React.Fragment>,
-        <React.Fragment key={params.id}>
+        <React.Fragment key={`edit-${params.id}`}>
           <GridActionsCellItem
             icon={<EditOutlined />}
             label="Edit"
             onClick={() => window.location.href = `/blog/edit/${params.id}`}
           />
         </React.Fragment>,
-        <React.Fragment key={params.id}>
+        <React.Fragment key={`delete-${params.id}`}>
           <GridActionsCellItem
             icon={<DeleteOutlined />}
             label="Delete"
             onClick={() => postDelete(params.id)}
+          />
+        </React.Fragment>,
+        <React.Fragment key={`status-${params.id}`}>
+          <GridActionsCellItem
+            icon={<VisibilityOutlined />}
+            label="Set status"
+            onClick={() => setStatus(params.id)}
           />
         </React.Fragment>
       ],
@@ -171,6 +180,18 @@ function PostList() {
         setDeleteId(0);
       });
   };
+
+  const setStatus = (id: GridRowId) => {
+    const api = process.env.NEXT_PUBLIC_API;
+    axios
+      .get(`${api}/blogs/status/${id}`)
+      .then(() => {
+        list();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
 
   return (
     <React.Fragment>
@@ -194,16 +215,22 @@ function PostList() {
             <TextField id="search-post" label="Search post:" variant="outlined" onChange={(e) => filterBy(e.target.value)} />
           </Box>
 
-          <DataGrid
-            rows={blogRows}
-            columns={blogColumns}
-            initialState={{
-              pagination: {
-                paginationModel: { page: 0, pageSize: 5 },
-              },
-            }}
-            pageSizeOptions={[5, 10]}
-          />
+          {
+            (blogRows.length > 0) ?
+              <DataGrid
+                rows={blogRows}
+                columns={blogColumns}
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                pageSizeOptions={[5, 10]}
+              />
+              :
+              <p>No data available.</p>
+          }
+
         </div>
 
         <Dialog

@@ -20,7 +20,7 @@ function Create() {
 
   const handleClose = () => {
     setOpenSuccessModal(false);
-    window.location.href = `/`;
+    window.location.href = `/blog`;
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -43,8 +43,8 @@ function Create() {
     formData.set('seo_title', '');
     formData.set('seo_keywords', '');
     formData.set('seo_description', '');
-    formData.set('active_status', '0');
-    formData.set('article_status', '0');
+    formData.set('active_status', '1');
+    formData.set('article_status', '1');
 
     try {
       await axios
@@ -116,7 +116,7 @@ function Create() {
           </Typography>
         </Box>
         <Box>
-          <Link href="/">
+          <Link href="/blog">
             <Button variant="contained"><ArrowBackIosNewOutlined sx={{ mr: 1 }} />Post list</Button>
           </Link>
         </Box>

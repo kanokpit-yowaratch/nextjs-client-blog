@@ -5,5 +5,6 @@ interface Post {
     description: string,
     details: string,
     category_id: number,
-    cover_path: string
+    cover_path: string,
+    active_status: number
 }

@@ -7,7 +7,8 @@ export const defaultForm: Post = {
     slug: "",
     description: "",
     details: "",
-    cover_path: ""
+    cover_path: "",
+    active_status: 1
 };
 
 export async function blogInfo(id: string): Promise<Post> {
