@@ -1,10 +1,8 @@
-import Blog from "@/components/blog-pages/Blog";
-import React from "react";
+import Blog from '@/components/blog-pages/Blog';
+import React from 'react';
 
 async function List() {
-  return (
-    <Blog />
-  )
+	return <Blog />;
 }
 
 export default List;

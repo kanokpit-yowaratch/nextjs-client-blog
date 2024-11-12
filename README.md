@@ -14,8 +14,8 @@ pnpm dev
 bun dev
 ```
 
-
 ## Configuration
+
 `.env` example:
 
 ```
@@ -29,7 +29,6 @@ NEXT_PUBLIC_API="https://kanokpit.com"
 NEXT_PUBLIC_HOST_NAME="kanokpit.com"
 NEXT_PUBLIC_PROTOCOL="https"
 ```
-
 
 ## Deploy on Vercel
 

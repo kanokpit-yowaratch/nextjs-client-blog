@@ -1,14 +1,12 @@
-import React from 'react'
+import React from 'react';
 interface PostParams {
-    params: {
-        id: number
-    }
+	params: {
+		id: number;
+	};
 }
 
 function page({ params }: PostParams) {
-  return (
-    <div>Update post: {params.id}</div>
-  )
+	return <div>Update post: {params.id}</div>;
 }
 
-export default page
+export default page;

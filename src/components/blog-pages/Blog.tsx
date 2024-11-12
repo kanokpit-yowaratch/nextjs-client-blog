@@ -19,7 +19,7 @@ const sidebar = {
 		{ title: 'June 1999', url: '#' },
 		{ title: 'May 1999', url: '#' },
 		{ title: 'April 1999', url: '#' },
-	]
+	],
 };
 
 export default function Blog() {
@@ -30,16 +30,11 @@ export default function Blog() {
 				<main>
 					<Grid container spacing={5} sx={{ mt: 3 }}>
 						<PostList />
-						<Sidebar
-							archives={sidebar.archives}
-						/>
+						<Sidebar archives={sidebar.archives} />
 					</Grid>
 				</main>
 			</Container>
-			<Footer
-				title="Footer"
-				description="Something here to give the footer a purpose!"
-			/>
+			<Footer title="Footer" description="Something here to give the footer a purpose!" />
 		</>
 	);
 }

@@ -7,31 +7,25 @@ import Typography from '@mui/material/Typography';
 import Link from 'next/link';
 
 interface HeaderProps {
-  title: string;
+	title: string;
 }
 
 export default function Header(props: HeaderProps) {
-  const { title } = props;
+	const { title } = props;
 
-  return (
-    <React.Fragment>
-      <Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        <Typography
-          component="h2"
-          variant="h5"
-          color="inherit"
-          noWrap
-          sx={{ flex: 1 }}
-        >
-          <Link href="/">{title}</Link>
-        </Typography>
-        <IconButton>
-          <SearchIcon />
-        </IconButton>
-        <Button variant="outlined" size="small">
-          Sign up
-        </Button>
-      </Toolbar>
-    </React.Fragment>
-  );
+	return (
+		<React.Fragment>
+			<Toolbar sx={{ borderBottom: 1, borderColor: 'divider' }}>
+				<Typography component="h2" variant="h5" color="inherit" noWrap sx={{ flex: 1 }}>
+					<Link href="/">{title}</Link>
+				</Typography>
+				<IconButton>
+					<SearchIcon />
+				</IconButton>
+				<Button variant="outlined" size="small">
+					Sign up
+				</Button>
+			</Toolbar>
+		</React.Fragment>
+	);
 }

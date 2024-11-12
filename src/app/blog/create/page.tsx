@@ -1,23 +1,33 @@
-'use client'
-import { useState } from 'react'
-import { Button, Box, Modal, Typography, Link, Grid, TextField, Container, DialogActions } from '@mui/material';
+'use client';
+import { useState } from 'react';
+import {
+	Button,
+	Box,
+	Modal,
+	Typography,
+	Link,
+	Grid,
+	TextField,
+	Container,
+	DialogActions,
+} from '@mui/material';
 import Folder from '@mui/icons-material/Folder';
-import NextImage from 'next/image'
-import axios from "axios"
+import NextImage from 'next/image';
+import axios from 'axios';
 import VisuallyHiddenInput from '@/app/styles/visuallyHiddenInput';
 import Style from '@/app/styles/style';
-import { ArrowBackIosNewOutlined } from "@mui/icons-material";
+import { ArrowBackIosNewOutlined } from '@mui/icons-material';
 import Textarea from '@mui/joy/Textarea';
 
 function Create() {
-	const [title, setTitle] = useState("");
-	const [slug, setSlug] = useState("");
-	const [description, setDescription] = useState("");
-	const [details, setDetails] = useState("");
-	const [file, setFile] = useState<File>()
+	const [title, setTitle] = useState('');
+	const [slug, setSlug] = useState('');
+	const [description, setDescription] = useState('');
+	const [details, setDetails] = useState('');
+	const [file, setFile] = useState<File>();
 	const [previewAvatar, setPreviewAvatar] = useState<Blob | MediaSource | null>();
 	const [openSuccessModal, setOpenSuccessModal] = useState(false);
-	const [active, setActive] = useState(true)
+	const [active, setActive] = useState(true);
 
 	const handleClose = () => {
 		setOpenSuccessModal(false);
@@ -58,10 +68,10 @@ function Create() {
 					}
 				})
 				.catch((error) => {
-					console.log("error: ", error);
+					console.log('error: ', error);
 				});
 		} catch (e) {
-			console.error(e)
+			console.error(e);
 		}
 	};
 
@@ -80,28 +90,24 @@ function Create() {
 				// console.log(reader.result);
 
 				img.onload = () => {
-					const canvas = document.createElement("canvas");
+					const canvas = document.createElement('canvas');
 					const maxSize = Math.max(img.width, img.height);
 					canvas.width = maxSize;
 					canvas.height = maxSize;
-					const ctx = canvas.getContext("2d");
-					ctx?.drawImage(
-						img,
-						(maxSize - img.width) / 2,
-						(maxSize - img.height) / 2
-					);
+					const ctx = canvas.getContext('2d');
+					ctx?.drawImage(img, (maxSize - img.width) / 2, (maxSize - img.height) / 2);
 					canvas.toBlob(
 						(blob: any) => {
 							const file = new File([blob], imgName, {
-								type: "image/png",
+								type: 'image/png',
 								lastModified: Date.now(),
 							});
 							// console.log(file);
 							setPreviewAvatar(file);
-							setFile(fileObject)
+							setFile(fileObject);
 						},
-						"image/jpeg",
-						0.8
+						'image/jpeg',
+						0.8,
 					);
 				};
 			};
@@ -118,16 +124,18 @@ function Create() {
 				</Box>
 				<Box>
 					<Link href="/blog">
-						<Button variant="contained"><ArrowBackIosNewOutlined sx={{ mr: 1 }} />Post list</Button>
+						<Button variant="contained">
+							<ArrowBackIosNewOutlined sx={{ mr: 1 }} />
+							Post list
+						</Button>
 					</Link>
 				</Box>
 			</Box>
 			<Box>
-
 				<form onSubmit={handleSubmit}>
 					<Box display="flex" flexDirection="column" alignItems="center">
 						<Box sx={{ mb: 1 }} display="flex" flexDirection="column" alignItems="center">
-							<div className='preview-image'>
+							<div className="preview-image">
 								{previewAvatar ? (
 									<NextImage
 										src={URL.createObjectURL(previewAvatar)}
@@ -149,13 +157,19 @@ function Create() {
 								)}
 							</div>
 
-							<Button sx={{ mt: 1 }} component="label" disabled={!active} variant="contained" startIcon={<Folder />} onChange={onSelectFile}>
+							<Button
+								sx={{ mt: 1 }}
+								component="label"
+								disabled={!active}
+								variant="contained"
+								startIcon={<Folder />}
+								onChange={onSelectFile}>
 								Browse file
 								<VisuallyHiddenInput type="file" />
 							</Button>
 						</Box>
 
-						<Grid container spacing={2} className='form-input'>
+						<Grid container spacing={2} className="form-input">
 							<Grid item xs={12}>
 								<TextField
 									id="title"
@@ -214,8 +228,7 @@ function Create() {
 				open={openSuccessModal}
 				onClose={handleClose}
 				aria-labelledby="modal-modal-title"
-				aria-describedby="modal-modal-description"
-			>
+				aria-describedby="modal-modal-description">
 				<Box sx={Style}>
 					<Typography id="modal-modal-title" variant="h6" component="h2">
 						Create post successfully.
@@ -228,7 +241,7 @@ function Create() {
 				</Box>
 			</Modal>
 		</Container>
-	)
+	);
 }
 
 export default Create;

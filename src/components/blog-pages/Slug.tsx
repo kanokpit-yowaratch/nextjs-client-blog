@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import axios from 'axios';
 import { Paper } from '@mui/material';
@@ -10,8 +10,8 @@ interface MainProps {
 function Slug(props: MainProps) {
 	const [title, setTitle] = useState('');
 	const [description, setDescription] = useState('');
-	const [details, setDetails] = useState('')
-	const [slugFeaturedPost, setSlugFeaturedPost] = useState({ image: '', imageText: '' })
+	const [details, setDetails] = useState('');
+	const [slugFeaturedPost, setSlugFeaturedPost] = useState({ image: '', imageText: '' });
 
 	const { slug } = props;
 
@@ -24,17 +24,17 @@ function Slug(props: MainProps) {
 				// console.log(data);
 				setTitle(data.title);
 				setDescription(data.description);
-				setDetails(data.details)
+				setDetails(data.details);
 				const slugHeader = {
 					image: `${api}/medias/${data.cover_path}`,
 					imageText: data.title,
 				};
-				setSlugFeaturedPost(slugHeader)
+				setSlugFeaturedPost(slugHeader);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
-	}
+	};
 
 	useEffect(() => {
 		postContent();
@@ -51,12 +51,10 @@ function Slug(props: MainProps) {
 						backgroundRepeat: 'no-repeat',
 						backgroundPosition: 'center',
 						backgroundImage: `url(${slugFeaturedPost.image})`,
-					}}
-				>
+					}}>
 					{<img style={{ display: 'none' }} src={slugFeaturedPost.image} alt={slugFeaturedPost.imageText} />}
 				</Paper>
-				<Grid container spacing={4}>
-				</Grid>
+				<Grid container spacing={4}></Grid>
 				<Grid container spacing={5} sx={{ mt: 3 }}>
 					<Grid
 						item
@@ -66,8 +64,7 @@ function Slug(props: MainProps) {
 							'& .markdown': {
 								py: 0,
 							},
-						}}
-					>
+						}}>
 						<h1>{title}</h1>
 						<h2>{description}</h2>
 						<p>{details}</p>
@@ -78,4 +75,4 @@ function Slug(props: MainProps) {
 	);
 }
 
-export default Slug
+export default Slug;

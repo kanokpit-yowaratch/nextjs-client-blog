@@ -3,47 +3,46 @@
 @tailwind utilities;
 
 :root {
-  /* --foreground-rgb: 0, 0, 0;
+	/* --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255; */
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    /* --foreground-rgb: 255, 255, 255;
+	:root {
+		/* --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0; */
-  }
+	}
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))) rgb(var(--background-start-rgb));
+	color: rgb(var(--foreground-rgb));
+	background: linear-gradient(to bottom, transparent, rgb(var(--background-end-rgb)))
+		rgb(var(--background-start-rgb));
 }
 
 .preview-image {
-  width: 350px;
-  min-width: 100px;
-  max-width: 400px;
-  height: 200px;
-  position: relative;
+	width: 350px;
+	min-width: 100px;
+	max-width: 400px;
+	height: 200px;
+	position: relative;
 }
 
 .form-input {
-  width: 80%;
+	width: 80%;
 }
 
 .link-page-style {
-  min-width: 35px;
-  margin: 2px;
-  padding: 2px 0px;
-  color: white;
-  background-color: blueviolet;
-  text-decoration: none;
+	min-width: 35px;
+	margin: 2px;
+	padding: 2px 0px;
+	color: white;
+	background-color: blueviolet;
+	text-decoration: none;
 }
 
 .link-page-style:hover {
-  background-color: rgb(121, 33, 204)
+	background-color: rgb(121, 33, 204);
 }
