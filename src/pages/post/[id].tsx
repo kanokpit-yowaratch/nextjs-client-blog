@@ -9,7 +9,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const paths = posts.map((post) => ({
     params: { id: post.id }
   }));
-  return { paths, fallback: false };
+  return { paths, fallback: 'blocking' };
 }
 
 export const getStaticProps: GetStaticProps<PostProps> = async ({ params }) => {
@@ -28,7 +28,8 @@ export const getStaticProps: GetStaticProps<PostProps> = async ({ params }) => {
         ...post,
         contentHtml,
       }
-    }
+    },
+    revalidate: 60, // 60s
   };
 }
 
