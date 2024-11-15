@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation';
 
 function PostList() {
 	const searchParams = useSearchParams();
-	const page = parseInt(searchParams.get('page') || '1') || 1;
+	const page = parseInt(searchParams?.get('page') || '1') || 1;
 	// const search = searchParams.get('keyword') || ''
 
 	const [api, setApi] = useState(process.env.NEXT_PUBLIC_API);
@@ -59,17 +59,7 @@ function PostList() {
 				item
 				xs={12}
 				md={8}
-				// sx={{
-				//   '& .markdown': {
-				//     py: 3,
-				//   },
-				// }}
 			>
-				{/* {posts.map((post) => (
-        <Markdown className="markdown" key={post.substring(0, 40)}>
-          {post}
-        </Markdown>
-      ))} */}
 				{blogData.map((post) => (
 					<Card
 						key={post.slug}
@@ -88,14 +78,15 @@ function PostList() {
 						}}>
 						<Grid container>
 							<Box sx={{ position: 'relative' }}>
-								<h3 style={{ marginTop: 0, paddingTop: 0 }}>{post.title}</h3>
-								<p>{post.description}</p>
-								<Link
-									href={`/${post.slug}`}
-									target="_BLANK"
-									style={{ fontSize: '14px', fontWeight: 500, color: 'purple', textDecoration: 'none' }}>
-									Continue reading…
-								</Link>
+								<h3 style={{ marginTop: 0, paddingTop: 0 }}>
+									<Link
+										href={`/${post.slug}`}
+										target="_BLANK"
+										style={{ color: 'purple', textDecoration: 'none' }}>
+										{post.title}
+									</Link>
+								</h3>
+								<p className="flex items-end">{post.description}</p>
 							</Box>
 						</Grid>
 					</Card>
