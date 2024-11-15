@@ -5,10 +5,7 @@ import IconButton from '@mui/material/IconButton';
 import SearchIcon from '@mui/icons-material/Search';
 import Typography from '@mui/material/Typography';
 import Link from 'next/link';
-
-interface HeaderProps {
-	title: string;
-}
+import { HeaderProps } from '@/types/common';
 
 export default function Header(props: HeaderProps) {
 	const { title } = props;

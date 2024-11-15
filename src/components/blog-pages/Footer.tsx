@@ -3,6 +3,7 @@ import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import { FooterProps } from '@/types/common';
 
 function Copyright() {
 	return (
@@ -15,11 +16,6 @@ function Copyright() {
 			{'.'}
 		</Typography>
 	);
-}
-
-interface FooterProps {
-	description: string;
-	title: string;
 }
 
 export default function Footer(props: FooterProps) {

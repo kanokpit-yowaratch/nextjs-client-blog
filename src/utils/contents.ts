@@ -1,13 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-
-export interface PostData {
-  id: string;
-  title: string;
-  date: string;
-  content_file?: string;
-}
+import { PostData } from '@/types/common';
 
 export function getAllPosts(): Omit<PostData, 'content'>[] {
   const postsDirectory = path.join(process.cwd(), 'src/components/blog-list');

@@ -1,11 +1,8 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { getAllPosts, getContentById, getPostById, PostData } from '../../utils/contents';
+import { getAllPosts, getContentById, getPostById } from '../../utils/contents';
 import { remark } from 'remark';
 import html from 'remark-html';
-
-interface PostProps {
-  post: Omit<PostData, 'content'> & { contentHtml: string };
-}
+import { PostProps } from '@/types/common';
 
 export const getStaticPaths: GetStaticPaths = async () => {
   const posts = getAllPosts();

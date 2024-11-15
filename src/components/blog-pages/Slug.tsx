@@ -2,10 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Grid from '@mui/material/Grid';
 import axios from 'axios';
 import { Paper } from '@mui/material';
-
-interface MainProps {
-	slug: string;
-}
+import { MainProps } from '@/types/common';
 
 function Slug(props: MainProps) {
 	const [title, setTitle] = useState('');

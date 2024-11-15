@@ -1,10 +1,7 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
-import { getAllPosts, PostData } from '../../utils/contents';
-
-interface HomeProps {
-  posts: Omit<PostData, 'content'>[];
-}
+import { getAllPosts } from '../../utils/contents';
+import { HomeProps } from '@/types/common';
 
 export const getStaticProps: GetStaticProps<HomeProps> = async () => {
   const posts = getAllPosts();
