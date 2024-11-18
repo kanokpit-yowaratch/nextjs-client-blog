@@ -2,25 +2,11 @@ import * as React from 'react';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
 import Header from './Header';
-import Sidebar from './Sidebar';
 import Footer from './Footer';
 import PostList from './PostList';
+import dynamic from 'next/dynamic';
 
-const sidebar = {
-	archives: [
-		{ title: 'March 2020', url: '#' },
-		{ title: 'February 2020', url: '#' },
-		{ title: 'January 2020', url: '#' },
-		{ title: 'November 1999', url: '#' },
-		{ title: 'October 1999', url: '#' },
-		{ title: 'September 1999', url: '#' },
-		{ title: 'August 1999', url: '#' },
-		{ title: 'July 1999', url: '#' },
-		{ title: 'June 1999', url: '#' },
-		{ title: 'May 1999', url: '#' },
-		{ title: 'April 1999', url: '#' },
-	],
-};
+const Sidebar = dynamic(() => import('./Sidebar'), { ssr: false });
 
 export default function Blog() {
 	return (
@@ -30,7 +16,7 @@ export default function Blog() {
 				<main>
 					<Grid container spacing={5} sx={{ mt: 3 }}>
 						<PostList />
-						<Sidebar archives={sidebar.archives} />
+						<Sidebar />
 					</Grid>
 				</main>
 			</Container>

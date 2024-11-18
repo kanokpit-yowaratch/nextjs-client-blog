@@ -10,13 +10,6 @@ export interface HeaderProps {
 	title: string;
 }
 
-export interface SidebarProps {
-	archives: ReadonlyArray<{
-		url: string;
-		title: string;
-	}>;
-}
-
 export interface MainProps {
 	slug: string;
 }
