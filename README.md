@@ -20,14 +20,10 @@ bun dev
 
 ```
 NEXT_PUBLIC_API="http://localhost:4000"
-NEXT_PUBLIC_HOST_NAME="localhost"
-NEXT_PUBLIC_PROTOCOL="http"
 
 Or
 
 NEXT_PUBLIC_API="https://kanokpit.com"
-NEXT_PUBLIC_HOST_NAME="kanokpit.com"
-NEXT_PUBLIC_PROTOCOL="https"
 ```
 
 ## Deploy on Vercel
